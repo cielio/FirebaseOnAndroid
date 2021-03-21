@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FirebaseOnAndroid</string>
+    <string name="selecionar_imagem_para_upload">Selecionar Imagem para Upload</string>
+</resources>
