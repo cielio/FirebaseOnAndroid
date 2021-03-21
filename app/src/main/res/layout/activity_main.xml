@@ -31,7 +31,7 @@
         app:layout_editor_absoluteX="262dp"
         app:layout_editor_absoluteY="32dp" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="400dp"
