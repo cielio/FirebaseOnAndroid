@@ -8,27 +8,28 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.Toast
 import coil.load
+import com.cielio.firebaseonandroid.databinding.ActivityMainBinding
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var filePath: Uri
-
+    private lateinit var binding: ActivityMainBinding
     companion object {
         private const val REQUEST_CODE = 111
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btnChoose.setOnClickListener {
+        binding.btnChoose.setOnClickListener {
             startFileChooser()
         }
 
-        btnUpload.setOnClickListener {
+        binding.btnUpload.setOnClickListener {
             //uploadImage()
             // [START upload_get_download_url]
             uploadImageGetDonload()
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun uploadImageGetDonload() {
-        progress.visibility = ProgressBar.VISIBLE
+        binding.progress.visibility = ProgressBar.VISIBLE
         val storage = Firebase.storage
         val storageRef = storage.reference
         val ref = storageRef.child("images/mountains.jpg")
@@ -53,10 +54,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        progress.visibility = ProgressBar.GONE
+                        binding.progress.visibility = ProgressBar.GONE
                         val downloadUri = task.result
                         Toast.makeText(applicationContext, "Arquivo enviado ${downloadUri.toString()}", Toast.LENGTH_LONG).show()
-                        imageView.load(downloadUri) {
+                        binding.imageView.load(downloadUri) {
                             placeholder(R.drawable.ic_launcher_background)
                             fallback(R.drawable.ic_launcher_background)
                         }
@@ -68,16 +69,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun uploadImage() {
-        progress.visibility = ProgressBar.VISIBLE
+        binding.progress.visibility = ProgressBar.VISIBLE
 
         val imageRef = FirebaseStorage.getInstance().reference.child("images/pic.jpg")
         imageRef.putFile(filePath)
                 .addOnSuccessListener {
-                    progress.visibility = ProgressBar.GONE
+                    binding.progress.visibility = ProgressBar.GONE
                     Toast.makeText(applicationContext, "Arquivo enviado", Toast.LENGTH_LONG).show()
                 }
                 .removeOnFailureListener {
-                    progress.visibility = ProgressBar.GONE
+                    binding.progress.visibility = ProgressBar.GONE
                     Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
                 }
                 .removeOnProgressListener {
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             filePath = data.data!!
-            imageView.setImageURI(filePath)
+            binding.imageView.setImageURI(filePath)
         }
     }
 }
